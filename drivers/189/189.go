@@ -17,6 +17,7 @@ import (
 	"io"
 	"math"
 	"net/http"
+	"net/http/cookiejar"
 	"path/filepath"
 	"regexp"
 	"strconv"
@@ -88,12 +89,6 @@ func (driver Cloud189) FormatFile(file *Cloud189File) *model.File {
 //	return nil, ErrPathNotFound
 //}
 
-type Cloud189Down struct {
-	ResCode         int    `json:"res_code"`
-	ResMessage      string `json:"res_message"`
-	FileDownloadUrl string `json:"fileDownloadUrl"`
-}
-
 type LoginResp struct {
 	Msg    string `json:"msg"`
 	Result int    `json:"result"`
@@ -111,6 +106,9 @@ func (driver Cloud189) Login(account *model.Account) error {
 		client.SetRetryCount(3)
 		client.SetHeader("Referer", "https://cloud.189.cn/")
 	}
+	// clear cookie
+	jar, _ := cookiejar.New(nil)
+	client.SetCookieJar(jar)
 	url := "https://cloud.189.cn/api/portal/loginUrl.action?redirectURL=https%3A%2F%2Fcloud.189.cn%2Fmain.action"
 	b := ""
 	lt := ""

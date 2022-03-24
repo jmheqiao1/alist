@@ -6,8 +6,11 @@ BUILD_WEB() {
   cd alist-web
   yarn
   yarn build
+  sed -i -e "s/\/CDN_URL\//\//g" dist/index.html
+  sed -i -e "s/assets/\/assets/g" dist/index.html
+  rm -f dist/index.html-e
   mv dist ..
-  cd ..
+  cd .. || exit
   rm -rf alist-web
 }
 
@@ -25,6 +28,7 @@ BUILD_DOCKER() {
   gitAuthor=$(git show -s --format='format:%aN <%ae>' HEAD)
   gitCommit=$(git log --pretty=format:"%h" -1)
   gitTag=$(git describe --long --tags --dirty --always)
+  webTag=$(wget -qO- -t1 -T2 "https://api.github.com/repos/alist-org/alist-web/releases/latest" | grep "tag_name" | head -n 1 | awk -F ":" '{print $2}' | sed 's/\"//g;s/,//g;s/ //g')
   ldflags="\
 -w -s \
 -X 'github.com/Xhofe/alist/conf.BuiltAt=$builtAt' \
@@ -32,6 +36,7 @@ BUILD_DOCKER() {
 -X 'github.com/Xhofe/alist/conf.GitAuthor=$gitAuthor' \
 -X 'github.com/Xhofe/alist/conf.GitCommit=$gitCommit' \
 -X 'github.com/Xhofe/alist/conf.GitTag=$gitTag' \
+-X 'github.com/Xhofe/alist/conf.WebTag=$webTag' \
   "
   go build -o ./bin/alist -ldflags="$ldflags" -tags=jsoniter alist.go
 }
@@ -44,6 +49,7 @@ BUILD() {
   gitAuthor=$(git show -s --format='format:%aN <%ae>' HEAD)
   gitCommit=$(git log --pretty=format:"%h" -1)
   gitTag=$(git describe --long --tags --dirty --always)
+  webTag=$(wget -qO- -t1 -T2 "https://api.github.com/repos/alist-org/alist-web/releases/latest" | grep "tag_name" | head -n 1 | awk -F ":" '{print $2}' | sed 's/\"//g;s/,//g;s/ //g')
   echo "build version: $gitTag"
   ldflags="\
 -w -s \
@@ -52,23 +58,25 @@ BUILD() {
 -X 'github.com/Xhofe/alist/conf.GitAuthor=$gitAuthor' \
 -X 'github.com/Xhofe/alist/conf.GitCommit=$gitCommit' \
 -X 'github.com/Xhofe/alist/conf.GitTag=$gitTag' \
+-X 'github.com/Xhofe/alist/conf.WebTag=$webTag' \
 "
 
   if [ "$1" == "release" ]; then
     xgo -out "$appName" -ldflags="$ldflags" -tags=jsoniter .
   else
-    xgo -targets=linux/amd64,windows/amd64 -out "$appName" -ldflags="$ldflags" -tags=jsoniter .
+    xgo -targets=linux/amd64,windows/amd64,darwin/amd64 -out "$appName" -ldflags="$ldflags" -tags=jsoniter .
   fi
   mkdir -p "build"
   mv alist-* build
   if [ "$1" != "release" ]; then
       cd build
-      upx -9 ./*
+      upx -9 ./alist-linux*
+      upx -9 ./alist-windows*
       find . -type f -print0 | xargs -0 md5sum >md5.txt
       cat md5.txt
-      cd ..
+      cd .. || exit
   fi
-  cd ..
+  cd .. || exit
 }
 
 BUILD_MUSL() {
@@ -86,6 +94,7 @@ BUILD_MUSL() {
   gitAuthor=$(git show -s --format='format:%aN <%ae>' HEAD)
   gitCommit=$(git log --pretty=format:"%h" -1)
   gitTag=$(git describe --long --tags --dirty --always)
+  webTag=$(wget -qO- -t1 -T2 "https://api.github.com/repos/alist-org/alist-web/releases/latest" | grep "tag_name" | head -n 1 | awk -F ":" '{print $2}' | sed 's/\"//g;s/,//g;s/ //g')
   ldflags="\
 -w -s \
 -X 'github.com/Xhofe/alist/conf.BuiltAt=$builtAt' \
@@ -93,6 +102,7 @@ BUILD_MUSL() {
 -X 'github.com/Xhofe/alist/conf.GitAuthor=$gitAuthor' \
 -X 'github.com/Xhofe/alist/conf.GitCommit=$gitCommit' \
 -X 'github.com/Xhofe/alist/conf.GitTag=$gitTag' \
+-X 'github.com/Xhofe/alist/conf.WebTag=$webTag' \
   "
   OS_ARCHES=(linux-musl-amd64 linux-musl-arm64 linux-musl-arm linux-musl-mips linux-musl-mips64 linux-musl-mips64le linux-musl-mipsle linux-musl-ppc64le linux-musl-s390x)
   CGO_ARGS=(x86_64-linux-musl-gcc aarch64-linux-musl-gcc arm-linux-musleabihf-gcc mips-linux-musl-gcc mips64-linux-musl-gcc mips64el-linux-musl-gcc mipsel-linux-musl-gcc powerpc64le-linux-musl-gcc s390x-linux-musl-gcc)
@@ -106,12 +116,13 @@ BUILD_MUSL() {
       export CGO_ENABLED=1
       go build -o ./build/$appName-$os_arch -ldflags="$ldflags" -tags=jsoniter alist.go
   done
-  cd ..
+  cd .. || exit
 }
 
 RELEASE() {
   cd alist/build
-  upx -9 ./*
+  upx -9 ./alist-linux-amd64
+  upx -9 ./alist-windows*
   find . -type f -print0 | xargs -0 md5sum >md5.txt
   cat md5.txt
   mkdir compress
@@ -125,7 +136,7 @@ RELEASE() {
   for i in $(find . -type f -name "$appName-windows-*"); do
     zip compress/$(echo $i | sed 's/\.[^.]*$//').zip "$i"
   done
-  cd ../..
+  cd ../.. || exit 
 }
 
 if [ "$1" = "web" ]; then

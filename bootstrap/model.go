@@ -50,8 +50,8 @@ func InitModel() {
 		}
 	case "mysql":
 		{
-			dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
-				databaseConfig.User, databaseConfig.Password, databaseConfig.Host, databaseConfig.Port, databaseConfig.Name)
+			dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local&tls=%s",
+				databaseConfig.User, databaseConfig.Password, databaseConfig.Host, databaseConfig.Port, databaseConfig.Name, databaseConfig.SslMode)
 			db, err := gorm.Open(mysql.Open(dsn), gormConfig)
 			if err != nil {
 				log.Fatalf("failed to connect database:%s", err.Error())
@@ -79,6 +79,6 @@ func InitModel() {
 		err = conf.DB.AutoMigrate(&model.SettingItem{}, &model.Account{}, &model.Meta{})
 	}
 	if err != nil {
-		log.Fatalf("failed to auto migrate")
+		log.Fatalf("failed to auto migrate: %s", err.Error())
 	}
 }

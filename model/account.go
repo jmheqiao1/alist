@@ -115,7 +115,7 @@ func GetAccountsByName(name string) []Account {
 		return accounts
 	}
 	for _, v := range accountsMap {
-		if v.Name == name || v.Name == name+balance {
+		if v.Name == name || strings.HasPrefix(v.Name, name+balance) {
 			accounts = append(accounts, v)
 		}
 	}
@@ -163,7 +163,7 @@ func GetAccountFiles() ([]File, error) {
 		return nil, err
 	}
 	for _, v := range accounts {
-		if strings.HasSuffix(v.Name, balance) {
+		if strings.Contains(v.Name, balance) {
 			continue
 		}
 		files = append(files, File{

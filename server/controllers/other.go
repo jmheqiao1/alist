@@ -7,6 +7,7 @@ import (
 	"github.com/Xhofe/alist/server/common"
 	"github.com/Xhofe/alist/utils"
 	"github.com/gin-gonic/gin"
+	"net/url"
 	"strings"
 )
 
@@ -24,8 +25,25 @@ func Plist(c *gin.Context) {
 		return
 	}
 	u := string(bytes)
+	uUrl, err := url.Parse(u)
+	if err != nil {
+		common.ErrorResp(c, err, 500)
+		return
+	}
 	name := utils.Base(u)
-	name = strings.TrimRight(name, ".ipa")
+	u = uUrl.String()
+	ipaIndex := strings.Index(name, ".ipa")
+	decodeName := name
+	if ipaIndex != -1 {
+		name = name[:ipaIndex]
+		decodeName = name
+		tmp, err := url.PathUnescape(name)
+		if err == nil {
+			decodeName = tmp
+		}
+	}
+	name = strings.ReplaceAll(name, "<", "[")
+	name = strings.ReplaceAll(name, ">", "]")
 	plist := fmt.Sprintf(`<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
     <dict>
@@ -46,7 +64,7 @@ func Plist(c *gin.Context) {
                     <key>bundle-identifier</key>
 					<string>ci.nn.%s</string>
 					<key>bundle-version</key>
-                    <string>4.0</string>
+                    <string>4.4</string>
                     <key>kind</key>
                     <string>software</string>
                     <key>title</key>
@@ -55,8 +73,8 @@ func Plist(c *gin.Context) {
             </dict>
         </array>
     </dict>
-</plist>`, u, name, name)
-	c.Status(200)
+</plist>`, u, name, decodeName)
 	c.Header("Content-Type", "application/xml;charset=utf-8")
+	c.Status(200)
 	_, _ = c.Writer.WriteString(plist)
 }

@@ -1,5 +1,5 @@
 <div align="center">
-  <a href="https://alist.nn.ci"><img height="100px" alt="logo" src="https://cdn.jsdelivr.net/gh/alist-org/assets@main/logo.svg"/></a>
+  <a href="https://alist.nn.ci"><img height="100px" alt="logo" src="https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg"/></a>
   <p><em>🗂️一个支持多存储的文件列表程序，使用 Gin 和 React 。</em></p>
   <a href="https://github.com/Xhofe/alist/releases"><img src="https://img.shields.io/github/release/Xhofe/alist?style=flat-square" alt="latest version"></a>
   <a href="https://github.com/Xhofe/alist/discussions"><img src="https://img.shields.io/github/discussions/Xhofe/alist?color=%23ED8936&style=flat-square" alt="discussions"></a>
@@ -11,10 +11,9 @@
   </a>
 </div>
 
-
 ---
 
-[English](./README.md) | 中文
+[English](./README.md) | 中文 | [Contributors](./CONTRIBUTORS.md) | [Contributing](./CONTRIBUTING.md)
 
 ## 支持
 
@@ -38,6 +37,7 @@
   - [x] [Yandex.Disk](https://disk.yandex.com/)
   - [x] [百度网盘](http://pan.baidu.com/)
   - [x] [夸克网盘](https://pan.quark.cn)
+  - [x] [迅雷云盘](https://pan.xunlei.com/)
 - [x] 部署方便，开箱即用
 - [x] 文件预览（PDF、markdown、代码、纯文本……）
 - [x] 画廊模式下的图像预览
@@ -63,11 +63,15 @@
 
 <https://alist.nn.ci>。
 
-![演示](https://inews.gtimg.com/newsapp_ls/0/14256614096/0)
+![演示](https://store.heytapimage.com/cdo-portal/feedback/202202/20/b271627971e29f0c7c9d59935b6ef381.png)
 
 ## 文档
 
 <https://alist-doc.nn.ci/>
+
+## 特别赞助
+- [找资源 - 阿里云盘资源搜索引擎](https://zhaoziyuan.la/)
+- [JetBrains: Essential tools for software developers and teams](https://www.jetbrains.com/)
 
 ##  许可
 
@@ -75,4 +79,4 @@
 
 ---
 
-> [@Blog](https://www.nn.ci/) · [@GitHub](https://github.com/Xhofe)
+> [@Blog](https://www.nn.ci/) · [@GitHub](https://github.com/Xhofe) · [@TelegramGroup](https://t.me/alist_chat) · [@QQGroup](https://jq.qq.com/?_wv=1027&k=OVPJcv2b)

@@ -1,0 +1,62 @@
+{
+  "files": [
+    "CONTRIBUTORS.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "Xhofe",
+      "name": "Xhofe",
+      "avatar_url": "https://avatars.githubusercontent.com/u/36558727?v=4",
+      "profile": "http://nn.ci",
+      "contributions": [
+        "code",
+        "ideas",
+        "doc"
+      ]
+    },
+    {
+      "login": "foxxorcat",
+      "name": "foxxorcat",
+      "avatar_url": "https://avatars.githubusercontent.com/u/95907542?v=4",
+      "profile": "https://github.com/foxxorcat",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "DaoChen6",
+      "name": "道辰",
+      "avatar_url": "https://avatars.githubusercontent.com/u/63903027?v=4",
+      "profile": "https://www.iflu.cf/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "vg-land",
+      "name": "vg-land",
+      "avatar_url": "https://avatars.githubusercontent.com/u/16739728?v=4",
+      "profile": "https://vg-land.github.io/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Clansty",
+      "name": "凌莞~(=^▽^=)",
+      "avatar_url": "https://avatars.githubusercontent.com/u/18461360?v=4",
+      "profile": "https://c5y.moe",
+      "contributions": [
+        "doc"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "alist",
+  "projectOwner": "Xhofe",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
